@@ -1,0 +1,174 @@
+<div class="row">
+    <div [ngClass]="{'col-md-8' : false, 'col-md-12': true}">
+        <nb-card>
+            <nb-card-header>
+                <div *ngIf="!isUpdate">Criar novo Usuário</div>
+                <div *ngIf="isUpdate">Editando {{user?.name}}</div>
+                <button class="btn btn-sm btn-info" (click)="changeImg()" *ngIf="isEditingSelf">Trocar Foto</button>
+                <div *ngIf="!isEditingSelf">
+                    <button class="btn btn-sm btn-info" (click)="goBack()">Voltar</button>
+                    <button class="btn btn-sm btn-success" *ngIf="isUpdate && !user?.enabled" (click)="enableUser()">
+                        Ativar usuario
+                    </button>
+                    <button class="btn btn-sm btn-danger" *ngIf="isUpdate && user?.enabled" (click)="disableUser()">
+                        Desativar usuario
+                    </button>
+                </div>
+            </nb-card-header>
+            <nb-card-body>
+                <app-loader *ngIf="loading"></app-loader>
+                <div *ngIf="!loading">
+                    <form>
+                        <div class="form-group row">
+                            <label for="input-email" class="col-md-2 col-form-label">Email</label>
+                            <div class="col-md-10">
+                                <input name="email" [(ngModel)]="user.email" id="input-email" pattern=".+@.+\..+"
+                                       #email="ngModel"
+                                       [class.form-control-danger]="email.invalid && email.touched"
+                                       placeholder="Email" [required]="true" class="form-control">
+                                <small class="form-text error"
+                                       *ngIf="email.invalid && email.touched && email.errors?.required">
+                                    É necessário digitar um email.
+                                </small>
+                                <small class="form-text error"
+                                       *ngIf="email.invalid && email.touched && email.errors?.pattern">
+                                    Isto não parece um email.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label">Senha</label>
+                            <div class="col-md-10">
+                                <input type="text" placeholder="Senha" class="form-control" #name="ngModel"
+                                       [(ngModel)]="user.password" name="senha"/>
+                                <small class="form-text text-success">
+                                    * Caso não queira alterar a senha deixar em branco
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label">Nome</label>
+                            <div class="col-md-10">
+                                <input type="text" placeholder="Nome" class="form-control" #name="ngModel"
+                                       [(ngModel)]="user.name" name="name" [required]="true"/>
+                                <small class="form-text error"
+                                       *ngIf="name.invalid && name.touched && name.errors?.required">
+                                    É necessário digitar um Nome.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label">Unidade de Trabalho</label>
+                            <div class="col-md-10">
+                                <input type="text" placeholder="Unidade de Trabalho" class="form-control"
+                                       [(ngModel)]="user.workUnit" name="work-unit" id="input-work-unit"/>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Nivel de permissão</label>
+                        <div class="col-md-10">
+                            <div class="dropdown" ngbDropdown>
+                                <button class="btn btn-sm btn-outline-success" type="button" ngbDropdownToggle>
+                                    <span *ngIf="!user.role">Nivel de permissão </span>
+                                    <span *ngIf="user.role">{{findRoleName(user.role)}}</span>
+                                </button>
+                                <ul class="dropdown-menu" ngbDropdownMenu>
+                                    <li class="dropdown-item" *ngFor="let role of roles"
+                                        (click)="user.role = role.code">{{role.name}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div *ngIf="user.address">
+                        <h5>Endereço:</h5>
+                        <br>
+                        <div class="form-group row">
+                            <label for="input-cep" class="col-md-2 col-form-label">CEP</label>
+                            <div class="col-md-10">
+                                <input name="cep" [(ngModel)]="user.address.zipcode" id="input-cep"
+                                       (ngModelChange)="updateAddress()"
+                                       placeholder="CEP" [required]="true" class="form-control"
+                                       [textMask]="{mask: cepMask}">
+                                <small class="form-text text-success">
+                                    * Digite o cep para autocompletar o endereço
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="input-country" class="col-md-2 col-form-label">País</label>
+                            <div class="col-md-10">
+                                <input name="cep" [(ngModel)]="user.address.country" id="input-country"
+                                       [disabled]="addressEnabled"
+                                       placeholder="País" [required]="true" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="input-state" class="col-md-2 col-form-label">Estado</label>
+                            <div class="col-md-10">
+                                <input name="cep" [(ngModel)]="user.address.state" id="input-state"
+                                       [disabled]="addressEnabled"
+                                       placeholder="Estado" [required]="true" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="input-neighborhood" class="col-md-2 col-form-label">Bairro</label>
+                            <div class="col-md-10">
+                                <input name="cep" [(ngModel)]="user.address.neighborhood" id="input-neighborhood"
+                                       [disabled]="addressEnabled"
+                                       placeholder="Bairro" [required]="true" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="input-cep" class="col-md-2 col-form-label">Endereço</label>
+                            <div class="col-md-10">
+                                <input name="cep" [(ngModel)]="user.address.street" id="input-street"
+                                       [disabled]="addressEnabled"
+                                       placeholder="Rua exemplo" [required]="true" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="input-number" class="col-md-2 col-form-label">Numero</label>
+                            <div class="col-md-10">
+                                <input name="cep" [(ngModel)]="user.address.number" id="input-number"
+                                       placeholder="Numero" [required]="true" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="input-complement" class="col-md-2 col-form-label">Complemento</label>
+                            <div class="col-md-10">
+                                <input name="cep" [(ngModel)]="user.address.complement" id="input-complement"
+                                       placeholder="Complemento" [required]="true" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-success w-100" (click)="save()">Salvar</button>
+                    </div>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+    <div class="col-md-4" *ngIf="false">
+        <nb-card>
+            <nb-card-header>Alterar senha</nb-card-header>
+            <nb-card-body>
+                <div class="input-group">
+                    <input type="password" placeholder="Digite sua senha atual" name="oldPassword"
+                           [(ngModel)]="objPassowrdReset.oldPassword" class="form-control" [required]="true"/>
+                </div>
+                <div class="input-group">
+                    <input type="password" placeholder="Digite sua senha nova" name="newPassword"
+                           [(ngModel)]="objPassowrdReset.newPassword" class="form-control" [required]="true"/>
+                </div>
+                <div class="input-group">
+                    <input type="password" placeholder="Digite sua senha nova mais uma vez" name="newPasswordConfirm"
+                           [(ngModel)]="objPassowrdReset.newPasswordConfirm" class="form-control" [required]="true"/>
+                </div>
+                <button class="btn btn-success  w-100" (click)="changePassword()">Salvar</button>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>

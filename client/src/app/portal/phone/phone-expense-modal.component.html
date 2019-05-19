@@ -1,0 +1,52 @@
+<div class="modal-header">
+    <span>Inserir nova despesa para o telefone</span>
+    <button class="close" aria-label="Close" (click)="closeModal()">
+        <span aria-hidden="true">x</span>
+    </button>
+</div>
+<div class="modal-body">
+    <app-expense title="Clique no tipo de despesa que deseja incluir"
+                 [disableActions]="true"
+                 (rowSelected)="rowSelected($event)"></app-expense>
+
+    <form>
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label">Nome</label>
+            <div class="col-md-10">
+                <input name="expense.name" [(ngModel)]="phoneExpense.expense.name" placeholder="Nome"
+                       class="form-control"
+                       [disabled]="true">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label">Categoria</label>
+            <div class="col-md-10">
+                <input name="expense.category" [(ngModel)]="phoneExpense.expense.category" placeholder="Categoria"
+                       class="form-control"
+                       [disabled]="true">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label">Valor</label>
+            <div class="col-md-10">
+                <input name="expense.value" [(ngModel)]="phoneExpense.value" placeholder="Valor" class="form-control">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label">Ano</label>
+            <div class="col-md-10">
+                <input name="expense.year" placeholder="Ano" class="form-control" maxlength="4"
+                       [(ngModel)]="phoneExpense.year">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label">Mês</label>
+            <div class="col-md-10">
+                <input name="expense.month" placeholder="Mês" class="form-control" [(ngModel)]="phoneExpense.month">
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-sm btn-success w-100" (click)="save()">Salvar</button>
+</div>

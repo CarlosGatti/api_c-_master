@@ -1,0 +1,13 @@
+<nb-card>
+    <nb-card-header>Convênios</nb-card-header>
+    <nb-card-body>
+        <ng2-smart-table
+            [settings]="settings"
+            [source]="source"
+            (create)="create($event)"
+            (delete)="remove($event)"
+            (edit)="edit($event)"
+            (rowSelect)="rowSelect($event)">
+        </ng2-smart-table>
+    </nb-card-body>
+</nb-card>

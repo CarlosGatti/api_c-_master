@@ -1,0 +1,75 @@
+<nb-card>
+    <nb-card-header>
+        <div>
+            <span *ngIf="isUpdate">Editando {{covenant?.name}}</span>
+            <span *ngIf="!isUpdate">Criar novo convênio</span>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-info" (click)="goBack()">Voltar</button>
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <app-company (rowSelected)="covenant.company = $event" [maxImgHeight]="25"></app-company>
+        <form>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label">Empresa</label>
+                <div class="col-md-10">
+                    <input type="text" placeholder="Empresa" class="form-control" #name="ngModel"
+                           [(ngModel)]="covenant.company.name" name="company" [required]="true" disabled/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label">Nome</label>
+                <div class="col-md-10">
+                    <input type="text" placeholder="Nome" class="form-control" #name="ngModel"
+                           [(ngModel)]="covenant.name" name="name" [required]="true"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label">Site</label>
+                <div class="col-md-10">
+                    <input type="text" placeholder="Site" class="form-control" #name="ngModel"
+                           [(ngModel)]="covenant.site" name="site" [required]="true"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label">Benêficio</label>
+                <div class="col-md-10">
+                    <input type="text" placeholder="Benêficio" class="form-control" #name="ngModel"
+                           [(ngModel)]="covenant.benefict" name="benefict" [required]="true"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label">Nome Contato</label>
+                <div class="col-md-10">
+                    <input type="text" placeholder="Nome Contato" class="form-control" #name="ngModel"
+                           [(ngModel)]="covenant.contactName" name="contactName" [required]="true"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label">Email Contado</label>
+                <div class="col-md-10">
+                    <input type="text" placeholder="Email Contado" class="form-control" #name="ngModel"
+                           [(ngModel)]="covenant.contactEmail" name="contactEmail" [required]="true"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label">Telefone</label>
+                <div class="col-md-10">
+                    <input type="text" placeholder="Telefone" class="form-control" #name="ngModel"
+                           [(ngModel)]="covenant.phone" name="phone" [required]="true"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label">Status </label>
+                <div class="col-md-10">
+                    <input type="text" placeholder="Status" class="form-control" #name="ngModel"
+                           [(ngModel)]="covenant.status" name="status" [required]="true"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-success w-100" (click)="save()">Salvar</button>
+            </div>
+        </form>
+    </nb-card-body>
+</nb-card>

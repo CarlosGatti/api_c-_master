@@ -1,0 +1,24 @@
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>Usuário</th>
+        <th>Unidade de trabalho</th>
+        <th>Data de criação</th>
+        <th>Habilitado</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users; trackBy: trackUser | orderBy : ['name', 'dateCreated']"
+        [routerLink]="['../profile']" [queryParams]="{id: user.id}" class="hover-pointer">
+        <td style="width: 30%">
+            <nb-user [picture]="user.imgProfile ? 'upload/' + user.imgProfile : null"
+                     [name]="user.name" [title]="user.email" size="large"></nb-user>
+        </td>
+        <td>{{user.workUnit}}</td>
+        <td>{{user.dateCreated | date : 'dd-MM-yyyy'}}</td>
+        <td>
+            <span class="badge badge-success fs-14" *ngIf="user.enabled">Ativo</span>
+            <span class="badge badge-danger fs-14" *ngIf="!user.enabled">Inativo</span>
+        </td>
+    </tr>
+</table>

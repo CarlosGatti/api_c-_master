@@ -1,0 +1,17 @@
+<nb-card>
+    <nb-card-header>
+        <span>Controle de usuários</span>
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Pesquisar Usuário" autofocus
+                   (keyup)="search($event.target.value)">
+        </div>
+        <button class="btn btn-sm btn-success" [routerLink]="['../profile']" *ngIf="isAdmin">Criar novo usuário</button>
+    </nb-card-header>
+    <nb-card-body>
+        <app-loader *ngIf="!users"></app-loader>
+        <div *ngIf="users">
+            <p>Clique em uma linha para selecionar o usuário</p>
+            <app-users-table [users]="users"></app-users-table>
+        </div>
+    </nb-card-body>
+</nb-card>

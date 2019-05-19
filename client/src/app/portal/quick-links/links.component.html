@@ -1,0 +1,15 @@
+   <nb-card>
+            <nb-card-header>
+                <div>Links</div>
+                <button class="btn btn-sm btn-info" (click)="goBack()">Voltar</button>
+            </nb-card-header>
+            <nb-card-body>
+                <ng2-smart-table
+                    [settings]="settings"
+                    [source]="source"
+                    (createConfirm)="create($event)"
+                    (deleteConfirm)="remove($event)"
+                    (editConfirm)="edit($event)">
+                </ng2-smart-table>
+            </nb-card-body>
+        </nb-card>

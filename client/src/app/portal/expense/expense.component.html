@@ -1,0 +1,22 @@
+<nb-card>
+    <nb-card-header>{{title}}</nb-card-header>
+
+    <nb-card-body>
+        <div *ngIf="!disableActions">Despesas são associadas a um histórico de despesas de um telefone no menu de
+            'Despesas
+            de telefone', o valor
+            padrão de uma despesa poderá ser alterado quando está sendo cadastrada a um histórico de despesas de um
+            telefone.
+        </div>
+        <br>
+
+        <ng2-smart-table
+            [settings]="settings"
+            [source]="source"
+            (createConfirm)="create($event)"
+            (deleteConfirm)="remove($event)"
+            (editConfirm)="edit($event)"
+            (userRowSelect)="rowSelect($event)">
+        </ng2-smart-table>
+    </nb-card-body>
+</nb-card>

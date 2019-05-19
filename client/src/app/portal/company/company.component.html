@@ -1,0 +1,14 @@
+<app-edit-company *ngIf="editing" (close)="editing = false" (reload)="getDelaid()" [company]="companyEditing"></app-edit-company>
+<nb-card>
+    <nb-card-header>Empresas</nb-card-header>
+    <nb-card-body>
+        <ng2-smart-table
+            [settings]="settings"
+            [source]="source"
+            (create)="create($event)"
+            (delete)="remove($event)"
+            (edit)="edit($event)"
+            (userRowSelect)="rowSelect($event)">
+        </ng2-smart-table>
+    </nb-card-body>
+</nb-card>

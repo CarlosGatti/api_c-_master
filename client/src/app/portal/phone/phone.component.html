@@ -1,0 +1,71 @@
+<nb-card>
+    <nb-card-header>
+        <div>
+            <nb-user [picture]="user.imgProfile ? 'upload/' + user.imgProfile : null"
+                     [name]="user?.name"
+                     title="{{phone.ddd}} - {{phone.number}}" size="xlarge" *ngIf="phone && isUpdate"></nb-user>
+            <span *ngIf="!isUpdate">Criar novo telefone</span>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-info" (click)="goBack()">Voltar</button>
+            <button class="btn btn-sm btn-success" *ngIf="isUpdate && !phone.enabled" (click)="enablePhone()">
+                Ativar telefone
+            </button>
+            <button class="btn btn-sm btn-danger" *ngIf="isUpdate && phone.enabled" (click)="disablePhone()">
+                Desativar telefone
+            </button>
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <app-loader *ngIf="loading"></app-loader>
+        <div *ngIf="phone">
+            <form>
+                <div *ngIf="!isUpdate">
+                    <div>Selecione o usuario a ser relacionado com o telefone</div>
+                    <br>
+                    <app-users-smart-table (rowSelected)="user = $event"></app-users-smart-table>
+                    <br>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">DDD do telefone</label>
+                    <div class="col-md-10">
+                        <input name="ddd" [(ngModel)]="phone.ddd" placeholder="DDD do telefone" [required]="true"
+                               [textMask]="{mask: dddMask}" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">Número de telefone</label>
+                    <div class="col-md-10">
+                        <input name="phone" [(ngModel)]="phone.number" placeholder="Número de telefone"
+                               [required]="true"
+                               [textMask]="{mask: phoneMask}" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">Tipo de telefone</label>
+                    <div class="col-md-10">
+                        <div class="dropdown" ngbDropdown>
+                            <button class="btn btn-sm btn-outline-success" type="button" ngbDropdownToggle>
+                                <span *ngIf="!phone.type">Tipo de telefone</span>
+                                <span *ngIf="phone.type">{{phone.type}}</span>
+                            </button>
+                            <ul class="dropdown-menu" ngbDropdownMenu>
+                                <li class="dropdown-item" *ngFor="let type of ['telefone', 'celular']"
+                                    (click)="phone.type = type">
+                                    {{type}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success w-100" (click)="save()">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </nb-card-body>
+</nb-card>
+<app-phone-expense *ngIf="phoneExpenses"
+                   [phone]="phone"
+                   [phoneExpenses]="phoneExpenses"
+                   (reload)="getPhoneExpense()"></app-phone-expense>

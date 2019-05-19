@@ -1,0 +1,79 @@
+<div class="row">
+    <div class="col-md-3">
+        <ngx-status-card title="Telefones Cadastrados" type="success">
+            {{phonesLenght}}
+        </ngx-status-card>
+    </div>
+
+    <div class="col-md-3">
+        <ngx-status-card title="Usuários Cadastrados" type="success">
+            {{usersLenght}}
+        </ngx-status-card>
+    </div>
+
+    <div class="col-md-3">
+        <ngx-status-card title="Empresas Cadastradas" type="success">
+            {{CompanyCount}}
+        </ngx-status-card>
+    </div>
+
+    <div class="col-md-3">
+        <ngx-status-card title="Convênios Cadastrados" type="success">
+            {{covenantCount}}
+        </ngx-status-card>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <nb-card size="large">
+            <nb-card-header>Ultimos Usuários cadastrados</nb-card-header>
+
+            <nb-card-body>
+                <div class="contact" *ngFor="let user of users | orderBy: '-dateCreated' ">
+                    <nb-user [picture]="user.imgProfile ? 'upload/' + user.imgProfile : null"
+                             [name]="user.name" [title]="user.workUnit"></nb-user>
+                    <span class="time">{{ user.dateCreated  | date : 'dd-MM-yyyy' }}</span>
+                </div>
+            </nb-card-body>
+
+        </nb-card>
+    </div>
+    <div class="col-md-6">
+        <app-expense-report [hideTable]="true"></app-expense-report>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <nb-card>
+            <nb-card-header>
+                <span>Links de acesso rápido</span>
+                <button class="btn btn-sm" routerLink="../editlinks"><i class="fa fa-cog"></i></button>
+            </nb-card-header>
+
+            <nb-card-body>
+                <div class="contact" *ngFor="let link of links">
+                    <a href="{{link.address}}" target="_blank" class="w-100">
+                        <nb-user [name]="link.address" [title]="link.name" size="medium"
+                                 class="w-75"></nb-user>
+                        <i class="fa fa-external-link pull-right"></i>
+                    </a>
+                </div>
+            </nb-card-body>
+
+        </nb-card>
+    </div>
+    <div class="col-md-6">
+        <nb-card size="large">
+            <nb-card-header>Ultimos Telefones cadastrados</nb-card-header>
+
+            <nb-card-body>
+                <div class="contact" *ngFor="let phone of phones | orderBy: '-dateCreated'">
+                    <nb-user [name]="phone.ddd + '-' + phone.number" [title]="phone.type" size="large"></nb-user>
+                    <span class="time">{{ phone.dateCreated  | date : 'dd-MM-yyyy' }}</span>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>

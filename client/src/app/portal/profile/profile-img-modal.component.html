@@ -1,0 +1,61 @@
+<div class="modal-header">
+    <span>Altere a foto do seu perfil *Até 3MB</span>
+    <button class="close" aria-label="Close" (click)="closeModal()">
+        <span aria-hidden="true">x</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div ng2FileDrop
+         [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+         (fileOver)="fileOverBase($event)"
+         [uploader]="uploader"
+         class="well my-drop-zone">
+        Arraste sua foto aqui
+    </div>
+    <br>
+    <input type="file" ng2FileSelect [uploader]="uploader" />
+    <br>
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="50%">Nome</th>
+            <th>Mb</th>
+            <th>%</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of uploader.queue">
+            <td><strong>{{ item?.file?.name }}</strong></td>
+            <td nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+            <td>
+                <div class="progress" style="margin-bottom: 0;">
+                    <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                </div>
+            </td>
+            <td class="text-center">
+                <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+            </td>
+            <td nowrap>
+                <button type="button" class="btn btn-success btn-sm"
+                        (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                    <span class="glyphicon glyphicon-upload"></span> Salvar
+                </button>
+                <button type="button" class="btn btn-danger btn-sm"
+                        (click)="item.remove()" [disabled]="item.isSuccess">
+                    <span class="glyphicon glyphicon-trash"></span> Remover
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-success btn-sm w-100"
+            (click)="closeModal()" *ngIf="uploader?.queue[0]?.isSuccess"> Concluido, Fechar
+    </button>
+    <button type="button" class="btn btn-danger btn-sm w-100"
+            (click)="closeModal()" *ngIf="uploader?.queue[0]?.isError"> Ocorreu um erro, Fechar
+    </button>
+</div>

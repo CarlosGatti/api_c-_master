@@ -1,0 +1,76 @@
+<nb-card>
+    <nb-card-header>
+        <span>Logo da empresa *Até 3MB</span>
+        <button class="close" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">x</span>
+        </button>
+    </nb-card-header>
+    <nb-card-body>
+        <form>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label">Nome</label>
+                <div class="col-md-10">
+                    <input type="text" placeholder="Nome" class="form-control" #name="ngModel"
+                           [(ngModel)]="company.name" name="name" [required]="true"/>
+                    <small class="form-text error"
+                           *ngIf="name.invalid && name.touched && name.errors?.required">
+                        É necessário digitar um Nome.
+                    </small>
+                </div>
+            </div>
+        </form>
+        <hr>
+        <div ng2FileDrop
+             [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+             (fileOver)="fileOverBase($event)"
+             [uploader]="uploader"
+             class="well my-drop-zone">
+            Arraste aqui
+        </div>
+        <br>
+        <input type="file" ng2FileSelect [uploader]="uploader"/>
+        <br>
+        <table class="table">
+            <thead>
+            <tr>
+                <th width="50%">Nome</th>
+                <th>Mb</th>
+                <th>%</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of uploader.queue">
+                <td><strong>{{ item?.file?.name }}</strong></td>
+                <td nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                <td>
+                    <div class="progress" style="margin-bottom: 0;">
+                        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                    <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                    <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                </td>
+                <td nowrap>
+                    <button type="button" class="btn btn-danger btn-sm"
+                            (click)="item.remove()" [disabled]="item.isSuccess">
+                        <span class="glyphicon glyphicon-trash"></span> Remover
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-success btn-sm w-100" (click)="closeModal()"
+                *ngIf="uploader?.queue[0]?.isSuccess"> Concluido, Fechar
+        </button>
+        <button type="button" class="btn btn-danger btn-sm w-100" (click)="closeModal()"
+                *ngIf="uploader?.queue[0]?.isError"> Ocorreu um erro, tente depois, fechar
+        </button>
+        <div class="form-group">
+            <button class="btn btn-success w-100" (click)="save()"
+                    *ngIf="!uploader?.queue[0]?.isError && !uploader?.queue[0]?.isSuccess">Salvar</button>
+        </div>
+    </nb-card-body>
+</nb-card>

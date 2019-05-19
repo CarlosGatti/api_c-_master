@@ -1,0 +1,55 @@
+<nb-card>
+    <nb-card-header>
+        <span>Despesas de telefone</span>
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Pesquisar Usuário" autofocus
+                   (keyup)="search($event.target.value)">
+        </div>
+        <button class="btn btn-sm btn-success" [routerLink]="['../phone']">
+            Criar novo telefone
+        </button>
+    </nb-card-header>
+    <nb-card-body>
+        <app-loader *ngIf="!users"></app-loader>
+        <div *ngIf="users">
+            <p>Clique em um telefone para selecionar</p>
+            <table class="table table-hover"
+                   *ngFor="let user of users | orderBy : ['name', 'dateCreated']; let t = index">
+                <thead *ngIf="t === 0">
+                <tr>
+                    <th style="width: 30%">Usuário</th>
+                    <th style="width: 10%">ddd</th>
+                    <th style="width: 30%">Telefone</th>
+                    <th style="width: 20%">Tipo</th>
+                    <th style="width: 10%">Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let phone of user?.phones; let i = index" [routerLink]="['../phone']" class="hover-pointer"
+                    [queryParams]="{userId: user.id, phoneId: phone.id}">
+                    <td style="width: 30%" *ngIf="i === 0" [attr.rowspan]="user.phones.length">
+                        <nb-user [picture]="user.imgProfile ? 'upload/' + user.imgProfile : null"
+                                 [name]="user.name"
+                                 [title]="user.enabled ? 'Ativo' : 'Inativo'" size="large"></nb-user>
+                    </td>
+                    <td style="width: 10%">
+                        <span *ngIf="!phone.ddd">-</span>
+                        <span>{{phone.ddd}}</span>
+                    </td>
+                    <td style="width: 30%">{{phone.number}}</td>
+                    <td style="width: 20%">
+            <span>
+              <i class="fa fa-mobile" *ngIf="phone.type === 'celular'"></i>
+              <i class="fa fa-phone" *ngIf="phone.type === 'telefone'"></i>
+              {{phone.type}}</span>
+                    </td>
+                    <td style="width: 10%">
+                        <span class="badge badge-success fs-14" *ngIf="phone.enabled">Ativo</span>
+                        <span class="badge badge-danger fs-14" *ngIf="!phone.enabled">Inativo</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </nb-card-body>
+</nb-card>
